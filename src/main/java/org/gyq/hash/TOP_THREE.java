@@ -29,38 +29,40 @@ import java.util.HashSet;
  */
 public class TOP_THREE {
     /**
-     * 暴力解法 最low 时间复杂度最大
-     * @param nums
+     * 用hash解法
+     *
+     * @param nums 入参
      * @return
      */
     public int longestConsecutive(int[] nums) {
-        int index = 1;
+        int result = 0;
+        //把所有的值存入到hash表中
         HashSet<Integer> set = new HashSet<>();
-        nums = Arrays.stream(nums).distinct().sorted().toArray();
-        if (nums.length==0){
-            return 0;
+        for (int num : nums) {
+            set.add(num);
         }
-        if (nums.length==1){
-            return 1;
-        }
-        for (int i = 0; i < nums.length-1; i++) {
-            if (nums[i] + 1 == nums[i + 1]) {
-                index++;
-                set.add(index);
-            }else {
-                index = 1;
-                set.add(index);
+        for (Integer i : set) {
+            if (set.contains(i - 1)) {
+                continue;
             }
+            int index = 1;
+            int curr = i;
+            while (set.contains(curr + 1)) {
+                index++;
+                curr++;
+            }
+            result = Math.max(result, index);
         }
-        return Collections.max(set);
+        return result;
+
     }
 
 
-
     public static void main(String[] args) {
+       int[] nums = {100, 4, 200, 1, 3, 2};
         TOP_THREE topThree = new TOP_THREE();
-        int[] array = {1,0,1,2};
-        int i = topThree.longestConsecutive(array);
+
+        int i = topThree.longestConsecutive(nums);
         System.out.println(i);
     }
 }
